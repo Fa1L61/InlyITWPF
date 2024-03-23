@@ -1,0 +1,41 @@
+﻿<Window x:Class="InlyITWPF.Views.AddValuteWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:InlyITWPF.Views"
+        mc:Ignorable="d"
+        Title="AddValute" Height="450" Width="400">
+    <Grid>
+        <StackPanel Grid.Column="1" DataContext="{Binding SelectedValutes}" Visibility="Visible">
+            <TextBlock Text="Введите наименование валюты:" Margin="10,10,10,0"/>
+            <TextBox Text="" Margin="10,0,10,10" />
+            <TextBlock Text="Введите стоимость руб.:" Margin="10,0,10,0"/>
+            <TextBox Text="" Margin="10,0,10,10"/>
+            <TextBlock Text="Введите номинал:" Margin="10,0,10,0"/>
+            <TextBox Text="" Margin="10,0,10,10"/>
+            <TextBlock Text="Введите предыдущаую цену:" Margin="10,0,10,0"/>
+            <TextBox Text="" Margin="10,0,10,10"/>
+            <TextBlock Text="Введите ID валюты:" Margin="10,0,10,0"/>
+            <TextBox Text="" Margin="10,0,10,10"/>
+            <TextBlock Text="Введите CharCode:" Margin="10,0,10,0"/>
+            <TextBox Text="" Margin="10,0,10,10"/>
+            <TextBlock Text="Введите NumCode:" Margin="10,0,10,0"/>
+            <TextBox Text="" Margin="10,0,10,10"/>
+
+
+
+            <!--<TextBlock Text="{Binding Previous, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0"/>
+   
+
+public string ID { get; set; }
+public string NumCode { get; set; }
+public string CharCode { get; set; }
+public int Nominal { get; set; }
+public string Name { get; set; }
+public double Value { get; set; }
+public string Previous { get; set; } -->
+        </StackPanel>
+        <Button Content="Добавить Валюту" Height="30" Width="100" Margin="0,0,10,10" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+    </Grid>
+</Window>
