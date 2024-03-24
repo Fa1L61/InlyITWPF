@@ -49,7 +49,7 @@
         </ListView>
 
 
-        <TextBlock  Margin="10,1,0,0" Text="{Binding MyText}" Grid.Column="1"></TextBlock>
+        <TextBlock  Margin="10,1,0,0" Text="{Binding LastActiveDate}" Grid.Column="1"></TextBlock>
 
 
         <StackPanel Grid.Column="1" DataContext="{Binding SelectedValute}" Visibility="Visible" Margin="0,20,0,0">

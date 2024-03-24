@@ -11,35 +11,22 @@
         <vm:AddValuteViewModel/>
     </Window.DataContext>
     <Grid>
-        <StackPanel Grid.Column="1" DataContext="" Visibility="Visible">
+        <StackPanel Grid.Column="1" Visibility="Visible">
             <TextBlock Text="Введите наименование валюты:" Margin="10,10,10,0"/>
-            <TextBox Text="" Margin="10,0,10,10" />
+            <TextBox x:Name="textBoxName" Text="{Binding NameTextBox}"  Margin="10,0,10,10" />
             <TextBlock Text="Введите стоимость руб.:" Margin="10,0,10,0"/>
-            <TextBox Text="" Margin="10,0,10,10"/>
+            <TextBox x:Name="textBoxValute" Text="{Binding ValueTextBox}" Margin="10,0,10,10"/>
             <TextBlock Text="Введите номинал:" Margin="10,0,10,0"/>
-            <TextBox Text="" Margin="10,0,10,10" />
+            <TextBox x:Name="textBoxNominal" Text="{Binding NominalTextBox}" Margin="10,0,10,10" />
             <TextBlock Text="Введите предыдущаую цену:" Margin="10,0,10,0"/>
-            <TextBox Text="" Margin="10,0,10,10" />
+            <TextBox x:Name="textBoxPrevious" Text="{Binding PreviousTextBox}" Margin="10,0,10,10" />
             <TextBlock Text="Введите ID валюты:" Margin="10,0,10,0"/>
-            <TextBox Text="" Margin="10,0,10,10"/>
+            <TextBox x:Name="textBoxId" Text="{Binding IdTextBox}" Margin="10,0,10,10"/>
             <TextBlock Text="Введите CharCode:" Margin="10,0,10,0"/>
-            <TextBox Text="" Margin="10,0,10,10"/>
+            <TextBox x:Name="textBoxCharCode" Text="{Binding CharCodeTextBox}" Margin="10,0,10,10"/>
             <TextBlock Text="Введите NumCode:" Margin="10,0,10,0"/>
-            <TextBox Text="" Margin="10,0,10,10"/>
-
-
-
-            <!--<TextBlock Text="{Binding Previous, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,0"/>
-   
-
-public string ID { get; set; }
-public string NumCode { get; set; }
-public string CharCode { get; set; }
-public int Nominal { get; set; }
-public string Name { get; set; }
-public double Value { get; set; }
-public string Previous { get; set; } -->
+            <TextBox x:Name="textBoxNumCode" Text="{Binding NumCodeTextBox}" Margin="10,0,10,10"/>
         </StackPanel>
-        <Button Content="Добавить Валюту" Command="{Binding ShowMainWin}" Height="30" Width="100" Margin="0,0,10,10" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+        <Button Content="Добавить Валюту" Command="{Binding AddValute}" Height="30" Width="100" Margin="0,0,10,10" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
     </Grid>
 </Window>
