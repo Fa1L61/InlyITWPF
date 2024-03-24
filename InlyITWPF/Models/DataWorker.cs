@@ -46,16 +46,16 @@ namespace InlyITWPF.Models
             var jTok = Encoding.UTF8.GetString(jToken);
             var web = JsonConvert.DeserializeObject<RootObject>(jTok.ToString());
 
+            _rootObject.Date = web.Date;
+            _rootObject.PreviousDate = web.PreviousDate;
+            _rootObject.PreviousURL = web.PreviousURL;
+            _rootObject.Timestamp = web.Timestamp;
 
-            //for (int i = 0; i < countLen; i++)
-            //{
-            //    object aL = a.Valute.Values;
-            //    aL[i].Equals();
-            //   //if (a.Valute[i])
-            //}
+
             List<Valute> listValute = new List<Valute>();
             List<string> itemsToDelete = new List<string>();
             var webList = web.Valute.Values.ToList();
+
             for (int i = 0; i < web.Valute.Count; i++)
             {
                 foreach (var valute in _rootObject.Valute)
@@ -91,7 +91,7 @@ namespace InlyITWPF.Models
             }
 
             _valutes = new ObservableCollection<Valute>(_rootObject.Valute.Select(x => x.Value));
-
+            MessageBox.Show("Файл успешно перезагружен с сайта");
             return OverwriteLocalData(_rootObject);
         }
 
