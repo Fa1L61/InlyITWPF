@@ -12,6 +12,8 @@ using System.Windows;
 using System.IO;
 using InlyITWPF.ViewModels;
 using System.Security.Cryptography.X509Certificates;
+using Newtonsoft.Json.Linq;
+using System.ComponentModel;
 
 namespace InlyITWPF.Models
 {
@@ -30,10 +32,8 @@ namespace InlyITWPF.Models
         }
         public ObservableCollection<Valute> WebData()
         {
-            byte[] jToken;
 
-
-            jToken = new WebClient().DownloadData("https://www.cbr-xml-daily.ru/daily_json.js");
+            var jToken = new WebClient().DownloadData("https://www.cbr-xml-daily.ru/daily_json.js");
             var jTok = Encoding.UTF8.GetString(jToken);
             _rootObject = JsonConvert.DeserializeObject<RootObject>(jTok.ToString());
             _valutes = new ObservableCollection<Valute>(_rootObject.Valute.Select(x => x.Value));
@@ -48,6 +48,20 @@ namespace InlyITWPF.Models
 
 
             return _valutes;
+        }
+        public ObservableCollection<Valute> OverwriteLocalData(string charCode)
+        {
+            _rootObject.Valute.Remove(charCode);
+            string ser = JsonConvert.SerializeObject(_rootObject);
+
+            if (ser.Length > 0)
+            {
+                File.Create("test.json").Close();
+                File.WriteAllText("test.json", ser, Encoding.UTF8);
+            }
+            _valutes = new ObservableCollection<Valute>(_rootObject.Valute.Select(x => x.Value));
+            return _valutes;
+
         }
 
         public ObservableCollection<Valute> LocalData()
@@ -69,11 +83,15 @@ namespace InlyITWPF.Models
             return _valutes;
 
         }
-        public ObservableCollection<Valute> GetData()
+        public ObservableCollection<Valute> GetData(string charCode = null)
         {
-            if (File.Exists("test.json"))
+            if (File.Exists("test.json") && charCode is null)
             {
                 return LocalData();
+            }
+            else if (charCode != null)
+            {
+                return OverwriteLocalData(charCode);
             }
             else
             {

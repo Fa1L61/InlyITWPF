@@ -12,11 +12,14 @@ using System.IO;
 using System.Windows.Data;
 using System;
 using System.Windows.Controls;
+using System.Windows.Navigation;
 
 namespace InlyITWPF.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
+        private DataWorker _dataWorker = new DataWorker();
+        private LocalSettings _localSettings = new LocalSettings();
         private Visibility _stackPanel { get; set; }
         public string MyText { get; }
         private Valute _selectedValute;
@@ -32,14 +35,10 @@ namespace InlyITWPF.ViewModels
         }
         public MainWindowViewModel()
         {
-            
-            DataWorker dataReader = new DataWorker();
-            LocalSettings localSettings = new LocalSettings();
+            MyText = _localSettings.DateSetter();
+            Valutes = _dataWorker.GetData();
 
-            MyText = localSettings.DateSetter();
-            Valutes = dataReader.GetData();
-
-            localSettings.DateWriter(localSettings);
+            _localSettings.DateWriter(_localSettings);
 
             if (Valutes.Count > 0)
             {
@@ -57,12 +56,7 @@ namespace InlyITWPF.ViewModels
             }
         }
 
-        private void OpenAddValuteWindow()
-        {
-            AddValuteWindow viewModel = new AddValuteWindow();
-            viewModel.Show();
-            
-        }
+        
 
         private RelayCommand _updateDataWeb;
         public RelayCommand UpdateDataWeb
@@ -87,7 +81,7 @@ namespace InlyITWPF.ViewModels
                 SelectedValute = Valutes[0];
             }
 
-            ICollectionView view = CollectionViewSource.GetDefaultView(_valutes);
+            ICollectionView view = CollectionViewSource.GetDefaultView(Valutes);
             view.Refresh();
         }
 
@@ -102,6 +96,37 @@ namespace InlyITWPF.ViewModels
                 }
                 );
             }
+        }
+
+        private void OpenAddValuteWindow()
+        {
+            var currWin = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
+
+            AddValuteWindow viewModel = new AddValuteWindow();
+            viewModel.Show();
+
+            currWin.Hide();
+        }
+
+        private RelayCommand _deleteValute;
+        public RelayCommand DeleteSelectedValute
+        {
+            get
+            {
+                return _deleteValute ?? new RelayCommand(() =>
+                {
+                    DeleteValute();
+                }
+                );
+            }
+        }
+
+        private void DeleteValute()
+        {
+            Valutes = _dataWorker.GetData(SelectedValute.CharCode);
+            
+            ICollectionView view = CollectionViewSource.GetDefaultView(Valutes);
+            view.Refresh();
         }
         /// servise Который работает с данными 
         /// Сервис который работает с бд (Entaty можно в принципе и без сервиса)

@@ -1,4 +1,5 @@
 ﻿using InlyITWPF.ViewModels;
+using InlyITWPF.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,6 @@ namespace InlyITWPF
         public MainWindow()
         {
             InitializeComponent();
-
-
-            //DataContext = new StartPageViewModel();
         }
     }
 }
