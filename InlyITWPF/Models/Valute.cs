@@ -14,6 +14,6 @@ namespace InlyITWPF.Models
         public int Nominal { get; set; }
         public string Name { get; set; }
         public double Value { get; set; }
-        public string Previous { get; set; }
+        public double Previous { get; set; }
     }
 }

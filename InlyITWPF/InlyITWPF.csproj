@@ -73,7 +73,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Models\DataReader.cs" />
+    <Compile Include="Models\DataWorker.cs" />
+    <Compile Include="Models\DoubleConverter.cs" />
+    <Compile Include="Models\LocalSettings.cs" />
     <Compile Include="Models\RootObject.cs" />
     <Compile Include="ViewModels\AddValuteViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

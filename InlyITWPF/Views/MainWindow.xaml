@@ -5,12 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:InlyITWPF"
         xmlns:vm="clr-namespace:InlyITWPF.ViewModels"
+        xmlns:dw="clr-namespace:InlyITWPF.Models"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
+
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="14" />
@@ -25,10 +26,8 @@
             <ColumnDefinition Width="50*" />
         </Grid.ColumnDefinitions>
 
-        <ContentControl Content="{Binding SelectedViewModel}"/>
-
         <ListView Grid.Column="0" ItemsSource="{Binding Valutes}"
-                 SelectedItem="{Binding SelectedValutes}" Margin="0,0,10,0">
+                 SelectedItem="{Binding SelectedValute}" Margin="0,0,10,0">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Margin="5">
@@ -49,18 +48,34 @@
             </ListView.ItemTemplate>
         </ListView>
 
-        <StackPanel Grid.Column="1" DataContext="{Binding SelectedValutes}" Visibility="Visible">
+
+        <TextBlock  Margin="10,1,0,0" Text="{Binding MyText}" Grid.Column="1"></TextBlock>
+
+
+        <StackPanel Grid.Column="1" DataContext="{Binding SelectedValute}" Visibility="Visible" Margin="0,20,0,0">
+            
             <TextBlock Text="Выбранный элемент" Margin="10,10,10,0" />
-            <TextBlock Text="Наименование Валюты:" Margin="10,0,10,0"/>
-            <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,10" />
-            <TextBlock Text="Стоимость руб.:" Margin="10,0,10,0"/>
-            <TextBox Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,10"/>
-            <TextBlock Text="Номинал:" Margin="10,0,10,0"/>
-            <TextBox Text="{Binding Nominal, UpdateSourceTrigger=PropertyChanged}" Margin="10,0,10,10"/>
+            <TextBlock  Margin="10,0,10,10">
+                <Run Text="Наименование Валюты: "/>
+                <Run Text=" "/>
+                <Run Text="{Binding Name}" />
+            </TextBlock>
+            <TextBlock  Margin="10,0,10,10">
+                <Run Text="Стоимость руб.: "/>
+                <Run Text=" "/>
+                <Run Text="{Binding Value}" />
+            </TextBlock>
+            <TextBlock  Margin="10,0,10,10">
+                <Run Text="Стоимость руб.: "/>
+                <Run Text=" "/>
+                <Run Text="{Binding Nominal}" />
+            </TextBlock>
+
 
             <TextBlock  Margin="10,0,10,10">
                 <Run Text="Предыдущая цена: "/>
-                <Run Text="{Binding Path=Previous}" />
+                <Run Text=" "/>
+                <Run Text="{Binding Previous}" />
             </TextBlock>
 
 
@@ -75,7 +90,8 @@
         public double Value { get; set; }
         public string Previous { get; set; } -->
         </StackPanel>
-        <Button Content="Добавить Валюту" Command="{Binding OpenAddValuteWnd}" Height="30" Width="100" Grid.Column="1" Margin="10,0,0,10" HorizontalAlignment="Left" VerticalAlignment="Bottom"/>
-        <Button Grid.Column="1" Content="Удалить" Width="70"  Height="30" Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+        <Button Content="Добавить Валюту" Command="{Binding OpenAddValuteWnd}" Height="40" Grid.Column="1" Margin="0,0,0,10" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="140"/>
+        <Button Content="Обновить данные с сайта" Command="{Binding UpdateDataWeb}" Grid.Column="1" Margin="0,0,10,65" Height="40" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150" />
+        <Button Grid.Column="1" Content="Удалить"  Height="40" Margin="0,0,10,10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Width="150" />
     </Grid>
 </Window>
