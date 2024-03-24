@@ -18,10 +18,10 @@ namespace InlyITWPF.ViewModels
 {
     public class MainWindowViewModel : BaseViewModel
     {
+
         private DataWorker _dataWorker = new DataWorker();
         private LocalSettings _localSettings = new LocalSettings();
-        private Visibility _stackPanel { get; set; }
-        public string MyText { get; }
+        public string LastActiveDate { get; }
         private Valute _selectedValute;
         private ObservableCollection<Valute> _valutes;
         public ObservableCollection<Valute> Valutes
@@ -35,7 +35,7 @@ namespace InlyITWPF.ViewModels
         }
         public MainWindowViewModel()
         {
-            MyText = _localSettings.DateSetter();
+            LastActiveDate = _localSettings.DateSetter();
             Valutes = _dataWorker.GetData();
 
             _localSettings.DateWriter(_localSettings);
@@ -73,7 +73,7 @@ namespace InlyITWPF.ViewModels
         private void UpdateDataFromWeb()
         {
             DataWorker dataReader = new DataWorker();
-            
+
             Valutes = new ObservableCollection<Valute>(dataReader.WebData());
             
             if (Valutes.Count > 0)
@@ -100,12 +100,11 @@ namespace InlyITWPF.ViewModels
 
         private void OpenAddValuteWindow()
         {
-            var currWin = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
+            var window = Application.Current.Windows.OfType<Window>().SingleOrDefault(x => x.IsActive);
 
-            AddValuteWindow viewModel = new AddValuteWindow();
-            viewModel.Show();
-
-            currWin.Hide();
+            AddValuteWindow valuteWindow = new AddValuteWindow();
+            window.Hide();
+            valuteWindow.Show();
         }
 
         private RelayCommand _deleteValute;
@@ -124,10 +123,25 @@ namespace InlyITWPF.ViewModels
         private void DeleteValute()
         {
             Valutes = _dataWorker.GetData(SelectedValute.CharCode);
-            
+
             ICollectionView view = CollectionViewSource.GetDefaultView(Valutes);
             view.Refresh();
         }
+
+        public void UpdateValutes(Valute valute, Window window)
+        {
+            window.Close();
+            
+            Valutes = _dataWorker.UpdateValutes(valute);
+            
+            ICollectionView view = CollectionViewSource.GetDefaultView(Valutes);
+            view.Refresh();
+
+            MainWindow mainWindow = new MainWindow();
+            mainWindow.Show();
+        }
+
+
         /// servise Который работает с данными 
         /// Сервис который работает с бд (Entaty можно в принципе и без сервиса)
     }
