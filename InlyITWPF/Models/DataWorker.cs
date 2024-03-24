@@ -14,12 +14,21 @@ using InlyITWPF.ViewModels;
 using System.Security.Cryptography.X509Certificates;
 using Newtonsoft.Json.Linq;
 using System.ComponentModel;
+using System.Reflection;
 
 namespace InlyITWPF.Models
 {
     public class DataWorker : BaseViewModel
     {
-        private RootObject _rootObject { get; set; }
+        public static RootObject _rootObject { get; set; }
+
+        public ObservableCollection<Valute> UpdateValutes(Valute valute)
+        {
+            _rootObject.Valute.Add(valute.CharCode,valute);
+            
+            return OverwriteLocalData(_rootObject);
+        }
+
         private ObservableCollection<Valute> _valutes;
         public ObservableCollection<Valute> Valutes
         {
@@ -35,32 +44,77 @@ namespace InlyITWPF.Models
 
             var jToken = new WebClient().DownloadData("https://www.cbr-xml-daily.ru/daily_json.js");
             var jTok = Encoding.UTF8.GetString(jToken);
-            _rootObject = JsonConvert.DeserializeObject<RootObject>(jTok.ToString());
+            var web = JsonConvert.DeserializeObject<RootObject>(jTok.ToString());
+
+
+            //for (int i = 0; i < countLen; i++)
+            //{
+            //    object aL = a.Valute.Values;
+            //    aL[i].Equals();
+            //   //if (a.Valute[i])
+            //}
+            List<Valute> listValute = new List<Valute>();
+            List<string> itemsToDelete = new List<string>();
+            var webList = web.Valute.Values.ToList();
+            for (int i = 0; i < web.Valute.Count; i++)
+            {
+                foreach (var valute in _rootObject.Valute)
+                {
+                    if (valute.Value.CharCode == webList[i].CharCode)
+                    {
+                        var fields = typeof(Valute).GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+                        foreach (var field in fields)
+                        {
+                            var flag = false;
+                            var value1 = field.GetValue(valute.Value);
+                            var value2 = field.GetValue(webList[i]);
+                            if (!value1.Equals(value2))
+                            {
+                                //_rootObject.Valute.Remove(valute.Value.CharCode);
+                                //_rootObject.Valute.Add(valute.Value.CharCode, valute.Value);
+                                listValute.Add(webList[i]);
+                                flag = true;
+                            }
+                            if (flag)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            foreach (var valute in listValute)
+            {
+                _rootObject.Valute.Remove(valute.CharCode);
+                _rootObject.Valute.Add(valute.CharCode, valute);
+            }
+
             _valutes = new ObservableCollection<Valute>(_rootObject.Valute.Select(x => x.Value));
 
-            string ser = JsonConvert.SerializeObject(_rootObject);
+            return OverwriteLocalData(_rootObject);
+        }
+
+        public ObservableCollection<Valute> OverwriteLocalData(RootObject rootObject)
+        {
+            string ser = JsonConvert.SerializeObject(rootObject);
 
             if (ser.Length > 0)
             {
                 File.Create("test.json").Close();
                 File.WriteAllText("test.json", ser, Encoding.UTF8);
             }
-
+            _valutes = new ObservableCollection<Valute>(rootObject.Valute.Select(x => x.Value));
 
             return _valutes;
         }
-        public ObservableCollection<Valute> OverwriteLocalData(string charCode)
+
+        public ObservableCollection<Valute> DeleteLocalData(string charCode)
         {
             _rootObject.Valute.Remove(charCode);
             string ser = JsonConvert.SerializeObject(_rootObject);
 
-            if (ser.Length > 0)
-            {
-                File.Create("test.json").Close();
-                File.WriteAllText("test.json", ser, Encoding.UTF8);
-            }
-            _valutes = new ObservableCollection<Valute>(_rootObject.Valute.Select(x => x.Value));
-            return _valutes;
+            return OverwriteLocalData(_rootObject);
 
         }
 
@@ -71,14 +125,6 @@ namespace InlyITWPF.Models
             string jsonString = File.ReadAllText("test.json");
             _rootObject = JsonConvert.DeserializeObject<RootObject>(jsonString);
             _valutes = new ObservableCollection<Valute>(_rootObject.Valute.Select(x => x.Value));
-
-            //string ser = JsonConvert.SerializeObject(_rootObject);
-
-            //if (ser.Length > 0)
-            //{
-            //    File.Create("test.json").Close();
-            //    File.WriteAllText("test.json", jsonString, Encoding.UTF8);
-            //}
 
             return _valutes;
 
@@ -91,7 +137,7 @@ namespace InlyITWPF.Models
             }
             else if (charCode != null)
             {
-                return OverwriteLocalData(charCode);
+                return DeleteLocalData(charCode);
             }
             else
             {
